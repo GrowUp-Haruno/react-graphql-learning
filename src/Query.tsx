@@ -1,4 +1,4 @@
-import { DocumentNode, useQuery } from '@apollo/client';
+import { DocumentNode, useLazyQuery } from '@apollo/client';
 import { data, getDataVariables } from './queries';
 
 type props = {
@@ -7,8 +7,12 @@ type props = {
 }
 
 export const Query: React.FC<props> = ({query,variables})=>{
-  const { loading, error, data }= useQuery<data,getDataVariables>(query, {variables:variables})
+  const [getQuery,{ loading, error, data }]= useLazyQuery<data,getDataVariables>(query)
   
+  const handleClick = () => {
+    getQuery({variables:variables})
+  }
+
   if (loading) return <p>Loading...</p>
 
   if (error) return <p>error</p>
@@ -18,7 +22,17 @@ export const Query: React.FC<props> = ({query,variables})=>{
   const edge = data?.search.edges
   const strRepository = repositoryCount === 1 ? "Repository" : "Repositories"
   
+  if (data === undefined) return (
+    <>
+      <button onClick={handleClick}>Search</button>
+      <h2>Plese search button</h2>
+    </>
+  )
+
   return (
-    <h2>GitHub Repositories Search Result - {repositoryCount} {strRepository}</h2>
+    <>
+      <button onClick={handleClick}>Search</button>
+      <h2>GitHub Repositories Search Result - {repositoryCount} {strRepository}</h2>
+    </>
   )
 }
