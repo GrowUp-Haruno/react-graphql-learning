@@ -23,13 +23,38 @@ query searchRepositories($after:String, $before:String,$first:Int,$last:Int,$que
   }
 }
 `
-export type getDataVariables = {
-  "after":string|null,
-  "before":string|null,
-  "first": number|null,
-  "last": number| null,
-  "query": string
+
+export type data = {
+    search: {
+      repositoryCount: number;
+      pageInfo: {
+        endCursor: string | null;
+        hasNextPage: string | null;
+        hasPreviousPage: string | null;
+        startCursor: string | null;
+      }
+      edges: {
+        cursor:string | null;
+        node:{
+          id: number;
+          name: string | null;
+            
+          url:string | null;
+          
+        }
+      }
+    }
+
 }
+
+export type getDataVariables = {
+  after:string|null,
+  before:string|null,
+  first: number|null,
+  last: number| null,
+  query: string
+}
+
 export const INITIAL_GET_DATA_VARIABLES : getDataVariables ={
   "after":null,
   "before":null,
@@ -37,3 +62,5 @@ export const INITIAL_GET_DATA_VARIABLES : getDataVariables ={
   "last": null,
   "query": "フロントエンドエンジニア"
 }
+
+
