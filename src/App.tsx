@@ -1,33 +1,21 @@
+import { useState } from "react";
+import { GET_DATA, INITIAL_GET_DATA_VARIABLES } from "./queries";
+import { Query } from "./Query";
 
-import { useQuery,gql } from '@apollo/client';
+const App:React.FC =() => {
+  const [getDataVariables, setGetDataVariables] = useState(INITIAL_GET_DATA_VARIABLES)
 
-const GET_DATA= gql`
-  query { 
-    viewer { 
-      login
-    }
+  const handleChange:(e:React.ChangeEvent<HTMLInputElement>)=>void = (e) => {
+    setGetDataVariables({ ...getDataVariables, query:e.target.value })
   }
-`
 
-const Query:React.FC = ()=>{
-  const { loading, error, data } = useQuery(GET_DATA)
-  
-  if (loading) return <p>Loading...</p>
-
-  if (error) return <p>error</p>
-
-  console.log(data)
-
-  return (
-    <h2>github graphql query complete</h2>
-  )
-}
-
-function App() {
   return (
     <>
+      <form>
+        <input value={getDataVariables.query} onChange={handleChange}/>
+      </form>
       <div className="App"> </div>
-      <Query />
+      <Query query={GET_DATA} variables={getDataVariables}/>
     </>
 
   );
